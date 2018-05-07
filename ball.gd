@@ -1,6 +1,6 @@
 extends Area2D
 
-const BALL_SPEED = 220
+const BALL_SPEED = 300
 const START_DIR = Vector2(-1, 0)
 var direction = START_DIR
 var speed = BALL_SPEED
