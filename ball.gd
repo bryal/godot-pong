@@ -17,9 +17,9 @@ func _process(delta):
 
 func hit_paddle(area):
     var dist_from_mid = position.y - area.position.y
-    var paddle_height = area.get_node("collision").shape.extents.y
-    var rel_dist_from_mid = dist_from_mid / paddle_height
-    var dir_y = rel_dist_from_mid * 2
+    var paddle_height = area.height()
+    var rel_dist_from_mid = dist_from_mid / (paddle_height / 2)
+    var dir_y = (rel_dist_from_mid + (randf() - 0.5) / 2) * 1.2
     direction = Vector2((-1) * sign(direction.x), dir_y).normalized()
 
 func hit_ceiling_floor():
