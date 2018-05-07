@@ -10,7 +10,7 @@ onready var initial_pos = self.position
 func reset():
     position = initial_pos
     speed = BALL_SPEED
-    direction = START_DIR
+    direction = Vector2((-1) * sign(direction.x), 0)
 
 func _process(delta):
     position += direction * speed * delta
