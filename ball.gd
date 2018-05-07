@@ -19,7 +19,8 @@ func hit_paddle(area):
     var dist_from_mid = position.y - area.position.y
     var paddle_height = area.get_node("collision").shape.extents.y
     var rel_dist_from_mid = dist_from_mid / paddle_height
-    direction = Vector2((-1) * sign(direction.x), rel_dist_from_mid).normalized()
+    var dir_y = rel_dist_from_mid * 2
+    direction = Vector2((-1) * sign(direction.x), dir_y).normalized()
 
 func hit_ceiling_floor():
     direction.y = -direction.y
