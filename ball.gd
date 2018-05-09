@@ -6,6 +6,7 @@ var direction = START_DIR
 var speed = BALL_SPEED
 
 onready var initial_pos = self.position
+onready var screen_h = get_viewport_rect().size.y
 
 func reset():
     position = initial_pos
@@ -13,6 +14,7 @@ func reset():
     direction = Vector2((-1) * sign(direction.x), 0)
 
 func _process(delta):
+    clamp(position.y, 0, screen_h)
     position += direction * speed * delta
 
 func hit_paddle(area):
