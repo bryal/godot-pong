@@ -17,15 +17,22 @@ func _process(delta):
     clamp(position.y, 0, screen_h)
     position += direction * speed * delta
 
+func flip_x_dir():
+    direction.x = (-1) * sign(direction.x)
+
 func hit_paddle(area):
     var dist_from_mid = position.y - area.position.y
     var paddle_height = area.height()
     var rel_dist_from_mid = dist_from_mid / (paddle_height / 2)
-    var dir_y = (rel_dist_from_mid + (randf() - 0.5) / 2) * 1.2
-    direction = Vector2((-1) * sign(direction.x), dir_y).normalized()
+    direction.y = (rel_dist_from_mid + (randf() - 0.5) / 2) * 1.2
+    flip_x_dir()
+    direction = direction.normalized()
 
 func hit_ceiling_floor():
     direction.y = -direction.y
+
+func hit_wall():
+    reset()
 
 func _on_area_entered(area):
     match area.get_name():
@@ -33,3 +40,5 @@ func _on_area_entered(area):
             hit_paddle(area)
         "ceiling", "floor":
             hit_ceiling_floor()
+        "left_wall", "right_wall":
+            hit_wall()
