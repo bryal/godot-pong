@@ -14,6 +14,7 @@
 [ext_resource path="res://camera.gd" type="Script" id=12]
 [ext_resource path="res://Ozzed - Dunes at Night/05 Facehammer.ogg" type="AudioStream" id=13]
 [ext_resource path="res://bg_music.gd" type="Script" id=14]
+[ext_resource path="res://pauser.gd" type="Script" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -35,13 +36,24 @@ extents = Vector2( 305.503, 31.045 )
 size = 60
 use_mipmaps = false
 use_filter = false
-font_data = ExtResource( 7 )
+font_data = ExtResource( 11 )
+_sections_unfolded = [ "Font", "Settings" ]
+
+[sub_resource type="DynamicFont" id=5]
+
+size = 50
+use_mipmaps = false
+use_filter = false
+font_data = ExtResource( 11 )
 _sections_unfolded = [ "Font", "Settings" ]
 
 [node name="game" type="Node2D" index="0"]
 
 script = ExtResource( 1 )
-_sections_unfolded = [ "Material" ]
+_sections_unfolded = [ "Material", "Pause" ]
+__meta__ = {
+"_edit_lock_": true
+}
 left_score = 0
 right_score = 0
 
@@ -106,10 +118,63 @@ editor/display_folded = false
 position = Vector2( 320, 200 )
 _sections_unfolded = [ "Transform" ]
 
+[node name="hit_paddle" type="AudioStreamPlayer2D" parent="ball" index="2"]
+
+position = Vector2( -320, -200 )
+stream = ExtResource( 6 )
+volume_db = 0.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="hit_floor_ceil" type="AudioStreamPlayer2D" parent="ball" index="3"]
+
+stream = ExtResource( 7 )
+volume_db = 0.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="miss" type="AudioStreamPlayer2D" parent="ball" index="4"]
+
+stream = ExtResource( 8 )
+volume_db = 0.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="game_start" type="AudioStreamPlayer2D" parent="ball" index="5"]
+
+stream = ExtResource( 9 )
+volume_db = 0.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="start_timer" type="Timer" parent="ball" index="6"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = true
+autostart = false
+
 [node name="separator" type="Sprite" parent="." index="3"]
 
 position = Vector2( 320, 200 )
-texture = ExtResource( 6 )
+texture = ExtResource( 10 )
+_sections_unfolded = [ "Visibility" ]
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
@@ -285,7 +350,49 @@ drag_margin_bottom = 0.2
 editor_draw_screen = true
 editor_draw_limits = false
 editor_draw_drag_margin = false
-script = ExtResource( 8 )
+script = ExtResource( 12 )
 _sections_unfolded = [ "Offset", "Transform" ]
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="bg_music" type="AudioStreamPlayer" parent="." index="11"]
+
+stream = ExtResource( 13 )
+volume_db = 0.0
+autoplay = true
+mix_target = 0
+bus = "Master"
+script = ExtResource( 14 )
+
+[node name="pauser" type="Label" parent="." index="12"]
+
+pause_mode = 2
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 20.0
+margin_top = 280.0
+margin_right = 620.0
+margin_bottom = 342.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 5 )
+align = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+script = ExtResource( 15 )
+_sections_unfolded = [ "Margin", "Pause", "custom_fonts" ]
+
+[connection signal="timeout" from="ball/start_timer" to="ball" method="_on_start_timer_timeout"]
+
+[connection signal="finished" from="bg_music" to="bg_music" method="_on_bg_music_finished"]
 
 
