@@ -244,7 +244,7 @@ wait_time = 1.0
 one_shot = true
 autostart = false
 
-[node name="ColorRect" type="ColorRect" parent="ball" index="5"]
+[node name="color_rect" type="ColorRect" parent="ball" index="5"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -254,14 +254,14 @@ margin_left = -4.0
 margin_top = -4.0
 margin_right = 4.0
 margin_bottom = 4.0
-rect_pivot_offset = Vector2( 0, 0 )
+rect_pivot_offset = Vector2( 4, 4 )
 rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 1, 1, 1, 1 )
-_sections_unfolded = [ "Margin", "Theme" ]
+_sections_unfolded = [ "Margin", "Rect", "Theme" ]
 
 [node name="collision" type="CollisionShape2D" parent="ball" index="6"]
 
@@ -512,15 +512,15 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 0
 theme = SubResource( 7 )
-min_value = -1.5
-max_value = 1.5
+min_value = -2.0
+max_value = 2.0
 step = 0.5
 page = 0.0
 value = 0.0
 exp_edit = false
 rounded = false
 editable = true
-tick_count = 7
+tick_count = 9
 ticks_on_borders = true
 focus_mode = 2
 script = ExtResource( 13 )
