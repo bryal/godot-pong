@@ -1,6 +1,6 @@
 extends Area2D
 
-const MOVE_SPEED = 260
+const MOVE_SPEED = 280
 onready var screensize = get_viewport_rect().size
 
 func height():

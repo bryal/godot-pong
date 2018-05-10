@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/game_start.wav-b0c87076f43eb94108d9353f2313bf37.sample"
+
+[deps]
+
+source_file="res://game_start.wav"
+source_md5="97fa32083b08170bfb4116086ed772d9"
+
+dest_files=[ "res://.import/game_start.wav-b0c87076f43eb94108d9353f2313bf37.sample" ]
+dest_md5="49383804f66bb3f88b02576870fd259e"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

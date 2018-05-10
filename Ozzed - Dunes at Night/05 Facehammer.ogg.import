@@ -1,0 +1,18 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/05 Facehammer.ogg-dcbe938cb8972719c89a644204b59fa1.oggstr"
+
+[deps]
+
+source_file="res://Ozzed - Dunes at Night/05 Facehammer.ogg"
+source_md5="a938da18bdf4febf98502fa9acbca00f"
+
+dest_files=[ "res://.import/05 Facehammer.ogg-dcbe938cb8972719c89a644204b59fa1.oggstr" ]
+dest_md5="10131313fabd9fde962cdadb0cb7f93e"
+
+[params]
+
+loop=true
+loop_offset=0

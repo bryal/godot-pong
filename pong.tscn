@@ -1,13 +1,19 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://pong.gd" type="Script" id=1]
 [ext_resource path="res://paddle.gd" type="Script" id=2]
 [ext_resource path="res://left_pallete.png" type="Texture" id=3]
 [ext_resource path="res://right_pallete.png" type="Texture" id=4]
 [ext_resource path="res://ball.tscn" type="PackedScene" id=5]
-[ext_resource path="res://separator.png" type="Texture" id=6]
-[ext_resource path="res://fira-sans/FiraSans-Bold.otf" type="DynamicFontData" id=7]
-[ext_resource path="res://camera.gd" type="Script" id=8]
+[ext_resource path="res://hit.wav" type="AudioStream" id=6]
+[ext_resource path="res://hit2.wav" type="AudioStream" id=7]
+[ext_resource path="res://miss.wav" type="AudioStream" id=8]
+[ext_resource path="res://game_start.wav" type="AudioStream" id=9]
+[ext_resource path="res://separator.png" type="Texture" id=10]
+[ext_resource path="res://fira-sans/FiraSans-Bold.otf" type="DynamicFontData" id=11]
+[ext_resource path="res://camera.gd" type="Script" id=12]
+[ext_resource path="res://Ozzed - Dunes at Night/05 Facehammer.ogg" type="AudioStream" id=13]
+[ext_resource path="res://bg_music.gd" type="Script" id=14]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -52,6 +58,10 @@ audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 2 )
 _sections_unfolded = [ "Collision", "Transform" ]
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
 
 [node name="sprite" type="Sprite" parent="left" index="0"]
 
@@ -76,6 +86,10 @@ audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 2 )
 _sections_unfolded = [ "Collision", "Transform" ]
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
 
 [node name="sprite" type="Sprite" parent="right" index="0"]
 
