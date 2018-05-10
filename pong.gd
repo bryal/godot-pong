@@ -7,10 +7,12 @@ export var right_score = 0
 # var a = 2
 # var b = "textvar"
 
+onready var camera = get_node("camera")
+
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
-	pass
+    pass
 
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.

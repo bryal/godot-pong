@@ -7,9 +7,7 @@ var speed = BALL_SPEED
 
 onready var initial_pos = self.position
 onready var screen_h = get_viewport_rect().size.y
-
-func get_game():
-    return get_tree().get_root().get_node("game")
+onready var game = get_tree().get_root().get_node("game")
 
 func reset():
     position = initial_pos
@@ -30,18 +28,23 @@ func hit_paddle(area):
     direction.y = (rel_dist_from_mid + (randf() - 0.5) / 2) * 1.2
     flip_x_dir()
     direction = direction.normalized()
+    game.camera.increase_shake_level(0.38)
+
+func hit_ceil_floor(down_up):
+    direction.y = down_up * abs(direction.y)
+    game.camera.increase_shake_level(0.32)
 
 func hit_floor():
-    direction.y = -abs(direction.y)
+    hit_ceil_floor(-1)
 
 func hit_ceiling():
-    direction.y = abs(direction.y)
+    hit_ceil_floor(1)
 
 func hit_wall():
+    game.camera.increase_shake_level(0.65)
     reset()
 
 func give_point(side):
-    var game = get_game()
     var score_name = side + "_score"
     var score = game.get(score_name)
     score += 1
