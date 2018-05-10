@@ -8,6 +8,9 @@ var speed = BALL_SPEED
 onready var initial_pos = self.position
 onready var screen_h = get_viewport_rect().size.y
 
+func get_game():
+    return get_tree().get_root().get_node("game")
+
 func reset():
     position = initial_pos
     speed = BALL_SPEED
@@ -28,17 +31,40 @@ func hit_paddle(area):
     flip_x_dir()
     direction = direction.normalized()
 
-func hit_ceiling_floor():
-    direction.y = -direction.y
+func hit_floor():
+    direction.y = -abs(direction.y)
+
+func hit_ceiling():
+    direction.y = abs(direction.y)
 
 func hit_wall():
     reset()
+
+func give_point(side):
+    var game = get_game()
+    var score_name = side + "_score"
+    var score = game.get(score_name)
+    score += 1
+    game.set(score_name, score)
+    game.get_node(score_name).text = str(score)
+
+func give_point_left():
+    give_point("left")
+
+func give_point_right():
+    give_point("right")
 
 func _on_area_entered(area):
     match area.get_name():
         "left", "right":
             hit_paddle(area)
-        "ceiling", "floor":
-            hit_ceiling_floor()
-        "left_wall", "right_wall":
+        "ceiling":
+            hit_ceiling()
+        "floor":
+            hit_floor()
+        "left_wall":
             hit_wall()
+            give_point_left()
+        "right_wall":
+            hit_wall()
+            give_point_right()
