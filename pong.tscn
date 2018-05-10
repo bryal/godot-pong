@@ -651,11 +651,13 @@ __meta__ = {
 
 [connection signal="finished" from="bg_music" to="bg_music" method="_on_bg_music_finished"]
 
-[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="right" method="_on_game_speed_slider_value_changed"]
+[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="camera" method="_on_game_speed_slider_value_changed"]
+
+[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="ball" method="_on_game_speed_slider_value_changed"]
 
 [connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="left" method="_on_game_speed_slider_value_changed"]
 
-[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="camera" method="_on_game_speed_slider_value_changed"]
+[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="right" method="_on_game_speed_slider_value_changed"]
 
 [connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="UI/game_speed_menu/game_speed_slider" method="_on_game_speed_slider_value_changed"]
 

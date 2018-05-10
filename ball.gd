@@ -41,6 +41,9 @@ func _physics_process(dt):
     position += direction * speed * dt
 
 
+func set_dir(v):
+    self.direction = v.normalized()
+    self.rotation_degrees = rad2deg(v.angle())
 
 func match_ball_speed_to_game_speed(game_speed):
     ball_speed_active = BALL_SPEED_DEFAULT * pow(2, game_speed)
@@ -50,7 +53,7 @@ func match_ball_speed_to_game_speed(game_speed):
 func reset():
     position = initial_pos
     speed = 0
-    direction = Vector2((-1) * sign(direction.x), 0)
+    self.set_dir(Vector2((-1) * sign(direction.x), 0))
     start()
 
 func start():
@@ -64,21 +67,18 @@ func play_ball():
 func play_audio(name):
     get_node(name).play()
 
-func flip_x_dir():
-    direction.x = (-1) * sign(direction.x)
-
 func hit_paddle(area):
     var dist_from_mid = position.y - area.position.y
     var paddle_height = area.height()
     var rel_dist_from_mid = dist_from_mid / (paddle_height / 2)
-    direction.y = (rel_dist_from_mid + (randf() - 0.5) / 1.5) * 1.3
-    flip_x_dir()
-    direction = direction.normalized()
+    var dir_x = (-1) * sign(direction.x)
+    var dir_y = (rel_dist_from_mid + (randf() - 0.5) / 1.5) * 1.3
+    self.set_dir(Vector2(dir_x, dir_y))
     game.camera.increase_shake_level(0.38)
     play_audio("hit_paddle")
 
 func hit_ceil_floor(down_up):
-    direction.y = down_up * abs(direction.y)
+    self.set_dir(Vector2(direction.x, down_up * abs(direction.y)))
     game.camera.increase_shake_level(0.32)
     play_audio("hit_floor_ceil")
 
@@ -105,7 +105,3 @@ func give_point_left():
 
 func give_point_right():
     give_point("right")
-
-
-func _on_ball_area_entered(area):
-	pass # replace with function body
