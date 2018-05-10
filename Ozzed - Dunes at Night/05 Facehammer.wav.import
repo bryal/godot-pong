@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/05 Facehammer.wav-7d3b70cbf454569777f8b9a7acdc7ef7.sample"
+
+[deps]
+
+source_file="res://Ozzed - Dunes at Night/05 Facehammer.wav"
+source_md5="e7395c14d715d94bce3a7b3621e0b37c"
+
+dest_files=[ "res://.import/05 Facehammer.wav-7d3b70cbf454569777f8b9a7acdc7ef7.sample" ]
+dest_md5="c2c18b7199bd066660329639c104d1be"
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

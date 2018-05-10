@@ -1,8 +1,9 @@
 extends Area2D
 
-const BALL_SPEED = 400
+const BALL_SPEED_DEFAULT = 360
 const START_DIR = Vector2(-1, 0)
 var direction = START_DIR
+var ball_speed_active
 var speed = 0
 
 onready var initial_pos = self.position
@@ -11,6 +12,7 @@ onready var game = get_tree().get_root().get_node("game")
 onready var start_timer = get_node("start_timer")
 
 func _ready():
+    match_ball_speed_to_game_speed(0)
     start()
 
 func _on_start_timer_timeout():
@@ -31,11 +33,19 @@ func _on_area_entered(area):
             hit_wall()
             give_point_right()
 
-func _process(delta):
+func _on_game_speed_slider_value_changed(game_speed):
+    match_ball_speed_to_game_speed(game_speed)
+
+func _physics_process(dt):
     position.y = clamp(position.y, 0, screen_h)
-    position += direction * speed * delta
+    position += direction * speed * dt
 
 
+
+func match_ball_speed_to_game_speed(game_speed):
+    ball_speed_active = BALL_SPEED_DEFAULT * pow(2, game_speed)
+    if speed != 0:
+        speed = ball_speed_active
 
 func reset():
     position = initial_pos
@@ -49,7 +59,7 @@ func start():
 
 func play_ball():
     play_audio("game_start")
-    speed = BALL_SPEED
+    speed = ball_speed_active
 
 func play_audio(name):
     get_node(name).play()
