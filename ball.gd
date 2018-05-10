@@ -105,3 +105,7 @@ func give_point_left():
 
 func give_point_right():
     give_point("right")
+
+
+func _on_ball_area_entered(area):
+	pass # replace with function body

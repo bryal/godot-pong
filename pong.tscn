@@ -1,8 +1,8 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://pong.gd" type="Script" id=1]
 [ext_resource path="res://paddle.gd" type="Script" id=2]
-[ext_resource path="res://ball.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ball.gd" type="Script" id=3]
 [ext_resource path="res://hit.wav" type="AudioStream" id=4]
 [ext_resource path="res://hit2.wav" type="AudioStream" id=5]
 [ext_resource path="res://miss.wav" type="AudioStream" id=6]
@@ -15,22 +15,27 @@
 [ext_resource path="res://game_speed_slider.gd" type="Script" id=13]
 [ext_resource path="res://pauser.gd" type="Script" id=14]
 
-[sub_resource type="RectangleShape2D" id=7]
+[sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
 extents = Vector2( 4, 16 )
 
-[sub_resource type="RectangleShape2D" id=8]
+[sub_resource type="RectangleShape2D" id=2]
+
+custom_solver_bias = 0.0
+extents = Vector2( 4, 4 )
+
+[sub_resource type="RectangleShape2D" id=3]
 
 custom_solver_bias = 0.0
 extents = Vector2( 10, 200 )
 
-[sub_resource type="RectangleShape2D" id=9]
+[sub_resource type="RectangleShape2D" id=4]
 
 custom_solver_bias = 0.0
 extents = Vector2( 305.503, 31.045 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=5]
 
 size = 60
 use_mipmaps = false
@@ -38,7 +43,7 @@ use_filter = false
 font_data = ExtResource( 9 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[sub_resource type="StyleBoxFlat" id=5]
+[sub_resource type="StyleBoxFlat" id=6]
 
 content_margin_left = -1.0
 content_margin_right = -1.0
@@ -67,7 +72,7 @@ anti_aliasing = true
 anti_aliasing_size = 1
 _sections_unfolded = [ "Expand Margin" ]
 
-[sub_resource type="Theme" id=6]
+[sub_resource type="Theme" id=7]
 
 HSlider/icons/grabber = null
 HSlider/icons/grabber_disabled = null
@@ -77,10 +82,10 @@ HSlider/styles/focus = null
 HSlider/styles/grabber_area = null
 HSlider/styles/grabber_disabled = null
 HSlider/styles/grabber_highlight = null
-HSlider/styles/slider = SubResource( 5 )
+HSlider/styles/slider = SubResource( 6 )
 _sections_unfolded = [ "HSlider", "HSlider/styles" ]
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=8]
 
 size = 50
 use_mipmaps = false
@@ -136,7 +141,7 @@ _sections_unfolded = [ "Anchor", "Grow Direction", "Margin" ]
 
 [node name="collision" type="CollisionShape2D" parent="left" index="1"]
 
-shape = SubResource( 7 )
+shape = SubResource( 1 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="right" type="Area2D" parent="." index="1"]
@@ -173,19 +178,26 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 1, 1, 1, 1 )
-_sections_unfolded = [ "Anchor", "Grow Direction", "Margin" ]
 
 [node name="collision" type="CollisionShape2D" parent="right" index="1"]
 
-shape = SubResource( 7 )
+shape = SubResource( 1 )
 
-[node name="ball" parent="." index="2" instance=ExtResource( 3 )]
+[node name="ball" type="Area2D" parent="." index="2"]
 
 position = Vector2( 320, 200 )
 z_index = 1
-_sections_unfolded = [ "Transform", "Z Index" ]
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+script = ExtResource( 3 )
+_sections_unfolded = [ "Collision", "Transform", "Z Index" ]
 
-[node name="hit_paddle" type="AudioStreamPlayer" parent="ball" index="2" groups=[
+[node name="hit_paddle" type="AudioStreamPlayer" parent="ball" index="0" groups=[
 "samples",
 ]]
 
@@ -195,7 +207,7 @@ autoplay = false
 mix_target = 0
 bus = "Master"
 
-[node name="hit_floor_ceil" type="AudioStreamPlayer" parent="ball" index="3" groups=[
+[node name="hit_floor_ceil" type="AudioStreamPlayer" parent="ball" index="1" groups=[
 "samples",
 ]]
 
@@ -205,7 +217,7 @@ autoplay = false
 mix_target = 0
 bus = "Master"
 
-[node name="miss" type="AudioStreamPlayer" parent="ball" index="4" groups=[
+[node name="miss" type="AudioStreamPlayer" parent="ball" index="2" groups=[
 "samples",
 ]]
 
@@ -215,7 +227,7 @@ autoplay = false
 mix_target = 0
 bus = "Master"
 
-[node name="game_start" type="AudioStreamPlayer" parent="ball" index="5" groups=[
+[node name="game_start" type="AudioStreamPlayer" parent="ball" index="3" groups=[
 "samples",
 ]]
 
@@ -225,12 +237,36 @@ autoplay = false
 mix_target = 0
 bus = "Master"
 
-[node name="start_timer" type="Timer" parent="ball" index="6"]
+[node name="start_timer" type="Timer" parent="ball" index="4"]
 
 process_mode = 1
 wait_time = 1.0
 one_shot = true
 autostart = false
+
+[node name="ColorRect" type="ColorRect" parent="ball" index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -4.0
+margin_top = -4.0
+margin_right = 4.0
+margin_bottom = 4.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 1, 1, 1, 1 )
+_sections_unfolded = [ "Margin", "Theme" ]
+
+[node name="collision" type="CollisionShape2D" parent="ball" index="6"]
+
+shape = SubResource( 2 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="separator" type="Sprite" parent="." index="3"]
 
@@ -262,7 +298,7 @@ __meta__ = {
 
 [node name="collision" type="CollisionShape2D" parent="left_wall" index="0"]
 
-shape = SubResource( 8 )
+shape = SubResource( 3 )
 
 [node name="right_wall" type="Area2D" parent="." index="5"]
 
@@ -283,7 +319,7 @@ __meta__ = {
 
 [node name="collision" type="CollisionShape2D" parent="right_wall" index="0"]
 
-shape = SubResource( 8 )
+shape = SubResource( 3 )
 
 [node name="ceiling" type="Area2D" parent="." index="6"]
 
@@ -306,7 +342,7 @@ __meta__ = {
 
 position = Vector2( -0.0802626, -10.8748 )
 scale = Vector2( 1.04723, 0.668788 )
-shape = SubResource( 9 )
+shape = SubResource( 4 )
 _sections_unfolded = [ "Material", "Pause", "Transform", "Visibility", "Z Index" ]
 
 [node name="floor" type="Area2D" parent="." index="7"]
@@ -330,7 +366,7 @@ __meta__ = {
 
 position = Vector2( -0.0261602, 10.9644 )
 scale = Vector2( 1.04694, 0.677945 )
-shape = SubResource( 9 )
+shape = SubResource( 4 )
 
 [node name="left_score" type="Label" parent="." index="8"]
 
@@ -349,7 +385,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 5 )
 text = "0"
 align = 2
 percent_visible = 1.0
@@ -377,7 +413,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 5 )
 text = "0"
 percent_visible = 1.0
 lines_skipped = 0
@@ -475,7 +511,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 0
-theme = SubResource( 6 )
+theme = SubResource( 7 )
 min_value = -1.5
 max_value = 1.5
 step = 0.5
@@ -524,7 +560,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 8 )
 text = "Press SPACE to unpause"
 align = 1
 percent_visible = 1.0
@@ -548,7 +584,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 8 )
 text = "Press SPACE to start"
 align = 1
 percent_visible = 1.0
@@ -609,18 +645,18 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[connection signal="area_entered" from="ball" to="ball" method="_on_area_entered"]
+
 [connection signal="timeout" from="ball/start_timer" to="ball" method="_on_start_timer_timeout"]
 
 [connection signal="finished" from="bg_music" to="bg_music" method="_on_bg_music_finished"]
-
-[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="ball" method="_on_game_speed_slider_value_changed"]
 
 [connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="right" method="_on_game_speed_slider_value_changed"]
 
 [connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="left" method="_on_game_speed_slider_value_changed"]
 
-[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="UI/game_speed_menu/game_speed_slider" method="_on_game_speed_slider_value_changed"]
-
 [connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="camera" method="_on_game_speed_slider_value_changed"]
+
+[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="UI/game_speed_menu/game_speed_slider" method="_on_game_speed_slider_value_changed"]
 
 
