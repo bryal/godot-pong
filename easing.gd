@@ -68,6 +68,25 @@ class Squeezer:
         var s = -damp_sin.step(dt)
         return Misc.lineToStretchSqueeze(self.damp_sin.amp, s)
 
+class Linear:
+    var k
+    var m
+    var t_end
+    var t = 0.0
+    var from
+    var to
+    func _init(from, to, time):
+        self.k = (float(to) - float(from)) / float(time)
+        self.m = float(from)
+        self.t_end = time
+        self.from = from
+        self.to = to
+    func step(dt):
+        var r = clamp(k * (t + dt) + m, min(from, to), max(from, to))
+        if t <= t_end:
+            t += dt
+        return r
+
 func new_constant(h):
     return Constant.new(h)
 
@@ -82,3 +101,6 @@ func new_stretcher(amp, freq, time):
 
 func new_squeezer(amp, freq, time):
     return Squeezer.new(amp, freq, time)
+
+func new_linear(from, to, time):
+    return Linear.new(from, to, time)

@@ -24,12 +24,13 @@ onready var start_timer = get_node("start_timer")
 onready var color_rect = get_node("color_rect")
 
 var direction = START_DIR
-var speed = 0
 var scaler = EASING.new_constant(0)
 var length_stretcher = EASING.new_constant(1)
 var width_stretcher = EASING.new_constant(1)
 var flasher = EASING.new_constant(0)
 var flash_color = FLASH_COLORS[0]
+var speed = 0
+var speeder = EASING.new_constant(0)
 var faketime_factor = 1.0
 
 func _ready():
@@ -48,10 +49,10 @@ func _on_area_entered(area):
             hit_floor()
         "left_wall":
             hit_wall()
-            give_point_left()
+            game.give_point_left()
         "right_wall":
             hit_wall()
-            give_point_right()
+            game.give_point_right()
 
 func _on_game_speed_slider_value_changed(game_speed):
     self.faketime_factor = pow(2, game_speed)
@@ -65,13 +66,17 @@ func _process(dt):
     process_faketime(dt_faketime)
 
 func physics_process_faketime(dt):
-    position.y = clamp(position.y, 0, screen_h)
+    step_speeder(dt)
+    position.y = clamp(position.y, 1, screen_h - 1)
     position += direction * speed * dt
 
 func process_faketime(dt):
     step_scaler(dt)
     step_stretcher(dt)
     step_flasher(dt)
+
+func step_speeder(dt):
+    self.speed = self.speeder.step(dt)
 
 func step_scaler(dt):
     var s = 1 + self.scaler.step(dt)
@@ -91,7 +96,7 @@ func set_dir(v):
 
 func reset():
     position = initial_pos
-    speed = 0
+    speeder = EASING.new_constant(0)
     self.set_dir(Vector2((-1) * sign(direction.x), 0))
     start()
 
@@ -102,6 +107,7 @@ func start():
 func play_ball():
     play_audio("game_start")
     self.set_bounce_stretcher()
+    self.set_bounce_speeder()
     speed = BALL_SPEED
 
 func play_audio(name):
@@ -119,10 +125,14 @@ func set_bounce_flasher():
     var i = randi() % len(FLASH_COLORS)
     self.flash_color = FLASH_COLORS[i]
 
+func set_bounce_speeder():
+    self.speeder = EASING.new_linear(0, BALL_SPEED, 0.15)
+
 func bounce():
     self.set_bounce_scaler()
     self.set_bounce_stretcher()
     self.set_bounce_flasher()
+    self.set_bounce_speeder()
 
 func hit_paddle(paddle):
     var dist_from_mid = position.y - paddle.position.y
@@ -151,16 +161,3 @@ func hit_wall():
     game.camera.increase_shake_level(0.65)
     play_audio("miss")
     reset()
-
-func give_point(side):
-    var score_name = side + "_score"
-    var score = game.get(score_name)
-    score += 1
-    game.set(score_name, score)
-    game.get_node(score_name).text = str(score)
-
-func give_point_left():
-    give_point("left")
-
-func give_point_right():
-    give_point("right")

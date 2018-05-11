@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://pong.gd" type="Script" id=1]
 [ext_resource path="res://paddle.gd" type="Script" id=2]
@@ -9,11 +9,12 @@
 [ext_resource path="res://game_start.wav" type="AudioStream" id=7]
 [ext_resource path="res://separator.png" type="Texture" id=8]
 [ext_resource path="res://fira-sans/FiraSans-Bold.otf" type="DynamicFontData" id=9]
-[ext_resource path="res://camera.gd" type="Script" id=10]
-[ext_resource path="res://Ozzed - Dunes at Night/05 Facehammer.wav" type="AudioStream" id=11]
-[ext_resource path="res://bg_music.gd" type="Script" id=12]
-[ext_resource path="res://game_speed_slider.gd" type="Script" id=13]
-[ext_resource path="res://pauser.gd" type="Script" id=14]
+[ext_resource path="res://score.gd" type="Script" id=10]
+[ext_resource path="res://camera.gd" type="Script" id=11]
+[ext_resource path="res://Ozzed - Dunes at Night/05 Facehammer.wav" type="AudioStream" id=12]
+[ext_resource path="res://bg_music.gd" type="Script" id=13]
+[ext_resource path="res://game_speed_slider.gd" type="Script" id=14]
+[ext_resource path="res://pauser.gd" type="Script" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -380,19 +381,22 @@ margin_top = 16.0
 margin_right = 280.0
 margin_bottom = 80.0
 grow_horizontal = 0
-rect_pivot_offset = Vector2( 0, 0 )
+rect_pivot_offset = Vector2( 223, 37 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "0"
 align = 2
+valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "custom_fonts" ]
+script = ExtResource( 10 )
+_sections_unfolded = [ "Rect", "custom_colors", "custom_fonts" ]
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
@@ -408,18 +412,21 @@ margin_left = 360.0
 margin_top = 16.0
 margin_right = 600.0
 margin_bottom = 80.0
-rect_pivot_offset = Vector2( 0, 0 )
+rect_pivot_offset = Vector2( 17, 37 )
 rect_clip_content = false
 mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "0"
+valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Margin", "custom_fonts" ]
+script = ExtResource( 10 )
+_sections_unfolded = [ "Margin", "Pause", "Rect", "custom_colors", "custom_constants", "custom_fonts" ]
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
@@ -450,7 +457,7 @@ drag_margin_bottom = 0.2
 editor_draw_screen = true
 editor_draw_limits = false
 editor_draw_drag_margin = false
-script = ExtResource( 10 )
+script = ExtResource( 11 )
 _sections_unfolded = [ "Offset", "Transform" ]
 __meta__ = {
 "_edit_group_": true,
@@ -462,17 +469,18 @@ __meta__ = {
 ]]
 
 pause_mode = 2
-stream = ExtResource( 11 )
+stream = ExtResource( 12 )
 volume_db = -10.0
 autoplay = true
 mix_target = 0
 bus = "Master"
-script = ExtResource( 12 )
+script = ExtResource( 13 )
 _sections_unfolded = [ "Pause" ]
 
 [node name="UI" type="Node2D" parent="." index="12"]
 
 pause_mode = 2
+editor/display_folded = true
 z_index = 10
 _sections_unfolded = [ "Pause", "Z Index" ]
 
@@ -524,7 +532,7 @@ editable = true
 tick_count = 9
 ticks_on_borders = true
 focus_mode = 2
-script = ExtResource( 13 )
+script = ExtResource( 14 )
 _sections_unfolded = [ "Pause", "Theme", "custom_styles" ]
 
 [node name="pauser" type="Container" parent="UI" index="1"]
@@ -541,7 +549,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = ExtResource( 14 )
+script = ExtResource( 15 )
 _sections_unfolded = [ "Pause" ]
 
 [node name="unpause_text" type="Label" parent="UI/pauser" index="0"]
@@ -652,14 +660,14 @@ __meta__ = {
 
 [connection signal="finished" from="bg_music" to="bg_music" method="_on_bg_music_finished"]
 
+[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="UI/game_speed_menu/game_speed_slider" method="_on_game_speed_slider_value_changed"]
+
 [connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="camera" method="_on_game_speed_slider_value_changed"]
-
-[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="ball" method="_on_game_speed_slider_value_changed"]
-
-[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="left" method="_on_game_speed_slider_value_changed"]
 
 [connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="right" method="_on_game_speed_slider_value_changed"]
 
-[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="UI/game_speed_menu/game_speed_slider" method="_on_game_speed_slider_value_changed"]
+[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="left" method="_on_game_speed_slider_value_changed"]
+
+[connection signal="value_changed" from="UI/game_speed_menu/game_speed_slider" to="ball" method="_on_game_speed_slider_value_changed"]
 
 
