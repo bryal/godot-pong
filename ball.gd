@@ -4,14 +4,18 @@ const EASING = preload("res://easing.gd")
 
 const BALL_SPEED = 360
 const START_DIR = Vector2(-1, 0)
-const SCALE_FACTOR = 1.6
-const SCALE_TIME = 0.4
-const L_STRETCH_AMP = 1.8
+const SCALE_FACTOR = 3
+const SCALE_TIME = 0.2
+const L_STRETCH_AMP = 1.9
 const L_STRETCH_FREQ = 5
-const L_STRETCH_TIME = 0.7
+const L_STRETCH_TIME = 0.8
 const W_STRETCH_AMP = 2
 const W_STRETCH_FREQ = 5
 const W_STRETCH_TIME = 0.4
+const FLASH_STRENGTH = 1.0
+const FLASH_TIME = 0.2
+const FLASH_COLORS = [Color(0.9, 0.7, 0.4), Color(0.7, 0.9, 0.5), Color(0.5, 0.7, 0.9), Color(0.9, 0.4, 0.8), Color(0.9, 0.4, 0.4)]
+const WHITE = Color(1, 1, 1)
 
 onready var initial_pos = self.position
 onready var screen_h = get_viewport_rect().size.y
@@ -24,6 +28,8 @@ var speed = 0
 var scaler = EASING.new_constant(0)
 var length_stretcher = EASING.new_constant(1)
 var width_stretcher = EASING.new_constant(1)
+var flasher = EASING.new_constant(0)
+var flash_color = FLASH_COLORS[0]
 var faketime_factor = 1.0
 
 func _ready():
@@ -65,6 +71,7 @@ func physics_process_faketime(dt):
 func process_faketime(dt):
     step_scaler(dt)
     step_stretcher(dt)
+    step_flasher(dt)
 
 func step_scaler(dt):
     var s = 1 + self.scaler.step(dt)
@@ -73,6 +80,10 @@ func step_scaler(dt):
 func step_stretcher(dt):
     color_rect.rect_scale.x = color_rect.rect_scale.x * self.length_stretcher.step(dt)
     color_rect.rect_scale.y = color_rect.rect_scale.y * self.width_stretcher.step(dt)
+
+func step_flasher(dt):
+    var strength = self.flasher.step(dt)
+    color_rect.color = WHITE.linear_interpolate(self.flash_color, strength)
 
 func set_dir(v):
     self.direction = v.normalized()
@@ -103,9 +114,15 @@ func set_bounce_stretcher():
     self.length_stretcher = EASING.new_squeezer(L_STRETCH_AMP, L_STRETCH_FREQ, L_STRETCH_TIME)
     self.width_stretcher = EASING.new_stretcher(W_STRETCH_AMP, W_STRETCH_FREQ, W_STRETCH_TIME)
 
+func set_bounce_flasher():
+    self.flasher = EASING.new_bounce_parabola(FLASH_STRENGTH, FLASH_TIME)
+    var i = randi() % len(FLASH_COLORS)
+    self.flash_color = FLASH_COLORS[i]
+
 func bounce():
     self.set_bounce_scaler()
     self.set_bounce_stretcher()
+    self.set_bounce_flasher()
 
 func hit_paddle(paddle):
     var dist_from_mid = position.y - paddle.position.y
