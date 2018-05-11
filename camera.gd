@@ -1,12 +1,11 @@
 extends Camera2D
 
 const SHAKE_RESET_TIME = 1.2
-const SHAKE_MAX_OFFSET = 30
-const SHAKE_MAX_ANGLE = 10 # degrees
+const SHAKE_MAX_OFFSET = 25
+const SHAKE_MAX_ANGLE = 9 # degrees
 const SHAKE_FREQ = 14
 
 var faketime_factor = 1.0
-
 var shake_level = 0.0
 var t = 0.0
 var p0

@@ -4,11 +4,14 @@ const EASING = preload("res://easing.gd")
 
 const BALL_SPEED = 360
 const START_DIR = Vector2(-1, 0)
-const SCALE_FACTOR = 1.5
-const SCALE_TIME = 0.3
-const STRETCH_AMP = 1.2
-const STRETCH_FREQ = 5
-const STRETCH_TIME = 0.7
+const SCALE_FACTOR = 1.6
+const SCALE_TIME = 0.4
+const L_STRETCH_AMP = 1.8
+const L_STRETCH_FREQ = 5
+const L_STRETCH_TIME = 0.7
+const W_STRETCH_AMP = 2
+const W_STRETCH_FREQ = 5
+const W_STRETCH_TIME = 0.4
 
 onready var initial_pos = self.position
 onready var screen_h = get_viewport_rect().size.y
@@ -19,7 +22,8 @@ onready var color_rect = get_node("color_rect")
 var direction = START_DIR
 var speed = 0
 var scaler = EASING.new_constant(0)
-var stretcher = EASING.new_constant(0)
+var length_stretcher = EASING.new_constant(1)
+var width_stretcher = EASING.new_constant(1)
 var faketime_factor = 1.0
 
 func _ready():
@@ -67,8 +71,8 @@ func step_scaler(dt):
     color_rect.rect_scale = Vector2(s, s)
 
 func step_stretcher(dt):
-    var s = self.stretcher.step(dt)
-    color_rect.rect_scale.x = color_rect.rect_scale.x * (STRETCH_AMP - s)
+    color_rect.rect_scale.x = color_rect.rect_scale.x * self.length_stretcher.step(dt)
+    color_rect.rect_scale.y = color_rect.rect_scale.y * self.width_stretcher.step(dt)
 
 func set_dir(v):
     self.direction = v.normalized()
@@ -96,20 +100,21 @@ func set_bounce_scaler():
     self.scaler = EASING.new_bounce_parabola(SCALE_FACTOR - 1, SCALE_TIME)
 
 func set_bounce_stretcher():
-    self.stretcher = EASING.new_dampened_sine(STRETCH_AMP, STRETCH_FREQ, STRETCH_TIME)
+    self.length_stretcher = EASING.new_squeezer(L_STRETCH_AMP, L_STRETCH_FREQ, L_STRETCH_TIME)
+    self.width_stretcher = EASING.new_stretcher(W_STRETCH_AMP, W_STRETCH_FREQ, W_STRETCH_TIME)
 
 func bounce():
     self.set_bounce_scaler()
     self.set_bounce_stretcher()
 
-func hit_paddle(area):
-    var dist_from_mid = position.y - area.position.y
-    var paddle_height = area.height()
-    var rel_dist_from_mid = dist_from_mid / (paddle_height / 2)
+func hit_paddle(paddle):
+    var dist_from_mid = position.y - paddle.position.y
+    var rel_dist_from_mid = dist_from_mid / (paddle.height / 2.0)
     var dir_x = (-1) * sign(direction.x)
     var dir_y = (rel_dist_from_mid + (randf() - 0.5) / 1.5) * 1.3
     self.set_dir(Vector2(dir_x, dir_y))
     self.bounce()
+    paddle.hit()
     game.camera.increase_shake_level(0.38)
     play_audio("hit_paddle")
 
